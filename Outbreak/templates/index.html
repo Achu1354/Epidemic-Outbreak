@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monkeypox Epidemic Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            font-weight: bold;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .prediction-box {
+            margin-top: 20px;
+        }
+        .prediction-box div {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Monkeypox Epidemic Outbreak Prediction</h1>
+        <form method="POST" action="/">
+            <div class="form-group">
+                <label for="country">Select Country:</label>
+                <select name="country" id="country">
+                    {% for country in countries %}
+                        <option value="{{ country }}" {% if country == selected_country %}selected{% endif %}>{{ country }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn">Get Predictions</button>
+        </form>
+
+        {% if show_plot %}
+        <div class="chart-container">
+            <div>
+                <h3>Recent Cases (7 days)</h3>
+                <img src="{{ url_for('static', filename='recent_cases.png') }}" alt="Recent Cases">
+            </div>
+            <div>
+                <h3>Model Predictions</h3>
+                <img src="{{ url_for('static', filename='model_predictions.png') }}" alt="Model Predictions">
+            </div>
+        </div>
+
+        <div class="prediction-box">
+            <h3>Predictions and Trends</h3>
+            {% for model, prediction in predictions.items() %}
+                <div>
+                    <strong>{{ model }}:</strong> {{ prediction | round(2) }} 
+                    - {{ trends[model] }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if trends['Error'] %}
+        <div class="error-message">
+            <p>{{ trends['Error'] }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
