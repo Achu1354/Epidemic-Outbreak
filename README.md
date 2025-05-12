@@ -1,0 +1,1 @@
+This is a epidemic outbreak prediction of Monkeypox disease where the four model are used for the predicting like SVM, XGBoost, GRU, LSTM and using flask for a web application which shows about the data of countries and spread prediction
